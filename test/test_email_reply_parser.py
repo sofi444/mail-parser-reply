@@ -170,6 +170,28 @@ class EmailMessageTest(unittest.TestCase):
         mail = self.get_email('begins_with_signature', parse=True, languages=['en'])
         self.assertTrue(mail.replies[0].signatures. startswith("Regards,"))
 
+    def test_es_simple_body(self):
+        mail = self.get_email('email_es_1', parse=True, languages=['es'])
+        self.assertEqual(1, len(mail.replies))
+        self.assertTrue("Necesito confirmar la reserva" in mail.replies[0].body)
+        self.assertTrue("Saludos cordiales," in mail.replies[0].signatures)
+        self.assertTrue("Tel: +34 91 555 1234" in mail.replies[0].signatures)
+        self.assertTrue("Saludos cordiales," not in mail.replies[0].body)
+
+    def test_es_quoted_reply(self):
+        mail = self.get_email('email_es_2', parse=True, languages=['es'])
+        self.assertEqual(2, len(mail.replies))
+        # First
+        self.assertTrue("Perfecto, queda confirmado." in mail.replies[0].body)
+        self.assertTrue("Un saludo," in mail.replies[0].signatures)
+        self.assertEqual("", mail.replies[0].headers)
+        self.assertListEqual([], mail.replies[0].disclaimers)
+        # Second
+        self.assertTrue("De: Juan García" in mail.replies[1].headers)
+        self.assertTrue("Te escribo para confirmar" in mail.replies[1].body)
+        self.assertTrue("AVISO: Este mensaje es confidencial" in mail.replies[1].content)
+        self.assertTrue("Saludos cordiales," in mail.replies[1].signatures)
+
     def get_email(self, name: str, parse: bool = True, languages: list = None):
         """ Return EmailMessage instance or text content """
         with open(f'test/emails/{name}.txt') as f:
