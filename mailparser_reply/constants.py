@@ -170,4 +170,69 @@ MAIL_LANGUAGES: Dict[str, Dict[str, str]] = {
                        + r'(?:(?:^|\n|\n'
                        + QUOTED_MATCH_INCLUDE + r')[* ]*(?:Von|An|Cc)(?:\s{,2}).*){2,})'
     },
+    'es': {
+        # El + date/time + name + escribió pattern
+        'wrote_header': r'^(?!El.*El\s.+?escribi(?:ó|o)[a-zA-Z0-9.:;<>()&@ -]*:)(' 
+                        + QUOTED_MATCH_INCLUDE 
+                        + r'El\s(?:.+?\s?.+?)\s?escribi(?:ó|o):)$',
+        
+        'from_header': (
+            r'((?:(?:^|\n|\n)'
+            + QUOTED_MATCH_INCLUDE
+            + r'[* ]*(?:'
+            + r'De:|'
+            + r'Enviado el:|'
+            + r'Para:|'
+            + r'Asunto:|'
+            + r'Fecha:|'
+            + r'CC:|'
+            + r'CCO:'
+            + r')[ *]*(?:\s{,2}).*){2,}(?:\n.*){,1})'
+        ),
+        
+        'disclaimers': [
+            'AVISO:',
+            'ADVERTENCIA:',
+            'CONFIDENCIAL:',
+            'NOTA IMPORTANTE:',
+            r'(?:Privilegiado|Confidencial|Privado|Sensible) (?:Aviso|Nota|Información):',
+            'IMPORTANTE:',
+            'ATENCIÓN:',
+            r'Este (?:mensaje|correo) es (?:confidencial|privado)',
+            r'La información contenida en este (?:mensaje|correo)',
+            r'(?:Este mensaje|Esta información) está dirigid[oa] exclusivamente a',
+            'Prohibida su divulgación:',
+        ],
+        
+        'signatures': [
+            'Saludos cordiales',
+            'Atentamente',
+            'Un saludo',
+            'Saludos',
+            'Gracias,',
+            'Cordialmente,',
+            'Reciba un cordial saludo',
+            'Saludos desde',
+            'Un abrazo',
+            'Hasta pronto',
+            'Mis mejores deseos',
+            'Quedo a su disposición',
+            'Quedo atento',
+            'Quedo pendiente', 
+            'Saludos y gracias',
+            r'(?:Muchas )?Gracias por su (?:atención|tiempo)',
+        ],
+        
+        'sent_from': (
+            'Enviado desde mi|'
+            'Obtener Outlook para|'
+            'Enviado desde el móvil|'
+            'Enviado desde mi iPhone|'
+            'Enviado desde mi iPad|'
+            'Enviado desde mi dispositivo|'
+            'Enviado desde Yahoo|'
+            'Enviado desde Gmail|'
+            'Enviado a través de'
+        ),
+    },
 }
