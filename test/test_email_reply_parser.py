@@ -192,6 +192,24 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("AVISO: Este mensaje es confidencial" in mail.replies[1].content)
         self.assertTrue("Saludos cordiales," in mail.replies[1].signatures)
 
+    def test_es_multilingual_thread(self):
+        mail = self.get_email('email_es_3', parse=True, languages=['es', 'en'])
+        self.assertEqual(3, len(mail.replies))
+        # First (Spanish)
+        self.assertTrue("Confirmo que hemos actualizado su reserva" in mail.replies[0].body)
+        self.assertTrue("Saludos cordiales," in mail.replies[0].signatures)
+        self.assertTrue("Tel: +34 93 123 4567" in mail.replies[0].signatures)
+        # Second (English)
+        self.assertTrue("Could you please confirm if late check-out" in mail.replies[1].body)
+        self.assertTrue("Best regards," in mail.replies[1].signatures)
+        self.assertTrue("Sent from my iPhone" in mail.replies[1].signatures)
+        self.assertTrue("De: John Thompson" in mail.replies[1].headers)
+        # Third (Spanish)
+        self.assertTrue("En referencia a su solicitud" in mail.replies[2].body)
+        self.assertTrue("Un saludo," in mail.replies[2].signatures)
+
+        print("REPLY 3", mail.replies[2].disclaimers)
+
     def get_email(self, name: str, parse: bool = True, languages: list = None):
         """ Return EmailMessage instance or text content """
         with open(f'test/emails/{name}.txt') as f:
